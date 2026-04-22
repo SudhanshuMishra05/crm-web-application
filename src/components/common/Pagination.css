@@ -1,0 +1,83 @@
+.pagination {
+    display: flex;
+  
+    justify-content: center;   
+    align-items: center;
+  
+    gap: 12px;                 
+  
+    width: 100%;               
+    max-width: 100%;           
+    box-sizing: border-box;   
+  
+    margin-top: 28px;
+    flex-wrap: wrap;         
+  }
+  
+  
+  /* buttons */
+  .page-btn {
+    border: none;
+    background: #f3f4f6;
+  
+    padding: 8px 14px;
+    border-radius: 8px;
+  
+    font-size: 13px;
+    font-weight: 500;
+  
+    cursor: pointer;
+    transition: 0.2s;
+  
+    flex-shrink: 0;            
+  }
+  
+  .page-btn:hover {
+    background: #e5e7eb;
+  }
+  
+  
+  /* numbers container */
+  .page-numbers {
+    display: flex;
+    gap: 12px;
+  
+    flex-wrap: wrap;           
+    justify-content: center;   
+  }
+  
+  
+  /* individual number */
+  .page-number {
+    min-width: 34px;
+    height: 34px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    border-radius: 8px;
+  
+    font-size: 13px;
+    font-weight: 500;
+  
+    cursor: pointer;
+    color: #6b7280;
+  
+    transition: 0.2s;
+  
+    flex-shrink: 0;            
+  }
+  
+  
+  /* hover */
+  .page-number:hover {
+    background: #f3f4f6;
+  }
+  
+  
+  /* active page */
+  .page-number.active {
+    background: #e5e7eb;
+    color: #111827;
+  }

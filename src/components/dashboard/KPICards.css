@@ -1,0 +1,40 @@
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .card {
+    background: #ffffff;
+  
+   
+    border: 1px solid #d9dee5;
+    border-radius: 12px;
+  
+    padding: 20px;
+  
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  
+    
+    transition: all 0.25s ease;
+  }
+  
+  
+  .card:hover {
+    transform: translateY(-4px);              
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.10);
+    border-color: #cfd6de;                    
+  }
+  
+  .card-title {
+    color: #64748b;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  
+  .card-value {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+  }
