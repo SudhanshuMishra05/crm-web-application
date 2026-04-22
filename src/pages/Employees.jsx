@@ -21,6 +21,11 @@ const Employees = () => {
     fetchEmployees();
   }, []);
 
+ 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const fetchEmployees = async () => {
     try {
       const res = await API.get('/employees');
@@ -36,11 +41,24 @@ const Employees = () => {
     setEditEmployee(null);
   };
 
-  // PAGINATION
-  const totalPages = Math.ceil(employees.length / employeesPerPage);
+  // 🔍 FILTER LOGIC
+  const filteredEmployees = employees.filter(emp => {
+    const fullName = `${emp.firstName || ''} ${emp.lastName || ''}`.toLowerCase();
+    const email = emp.email?.toLowerCase() || "";
+    const empId = emp.employeeId?.toLowerCase() || "";
+
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      email.includes(searchTerm.toLowerCase()) ||
+      empId.includes(searchTerm.toLowerCase())
+    );
+  });
+
+ 
+  const totalPages = Math.ceil(filteredEmployees.length / employeesPerPage);
   const indexOfLastEmployee = currentPage * employeesPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-  const currentEmployees = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+  const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
 
   // SELECT ALL
   const handleSelectAll = (e) => {
@@ -72,7 +90,6 @@ const Employees = () => {
           title="Employees"
         />
 
-        {/* Only Add Button (Figma Match) */}
         <div className="top-actions">
           <button
             className="btn btn-primary"
@@ -112,64 +129,70 @@ const Employees = () => {
             </thead>
 
             <tbody>
-              {currentEmployees.map(emp => (
-                <tr key={emp._id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedEmployees.includes(emp._id)}
-                      onChange={() => handleSelectOne(emp._id)}
-                    />
-                  </td>
+              {currentEmployees.length > 0 ? (
+                currentEmployees.map(emp => (
+                  <tr key={emp._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedEmployees.includes(emp._id)}
+                        onChange={() => handleSelectOne(emp._id)}
+                      />
+                    </td>
 
-                  {/* NAME */}
-                  <td>
-                    <div className="employee-cell">
-                      <div className="avatar">
-                        {emp.firstName?.[0]}
-                      </div>
-                      <div>
-                        <div className="name">
-                          {emp.firstName} {emp.lastName}
+                    <td>
+                      <div className="employee-cell">
+                        <div className="avatar">
+                          {emp.firstName?.[0]}
                         </div>
-                        <div className="email">{emp.email}</div>
+                        <div>
+                          <div className="name">
+                            {emp.firstName} {emp.lastName}
+                          </div>
+                          <div className="email">{emp.email}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td>{emp.employeeId}</td>
-                  <td>{emp.assignedLeads}</td>
-                  <td>{emp.closedLeads}</td>
+                    <td>{emp.employeeId}</td>
+                    <td>{emp.assignedLeads}</td>
+                    <td>{emp.closedLeads}</td>
 
-                  {/* STATUS */}
-                  <td>
-                    <div className="status">
-                      <span
-                        className={`dot ${
-                          emp.status === 'Active' ? 'active' : 'inactive'
-                        }`}
-                      ></span>
-                      {emp.status}
-                    </div>
-                  </td>
+                    <td>
+                      <div className="status">
+                        <span
+                          className={`dot ${
+                            emp.status === 'Active' ? 'active' : 'inactive'
+                          }`}
+                        ></span>
+                        {emp.status}
+                      </div>
+                    </td>
 
-                  <td>
-                    <ThreeDotMenu
-                      id={emp._id}
-                      type="employees"
-                      onDeleteSuccess={(deletedId) => {
-                        setEmployees(prev =>
-                          prev.filter(e => e._id !== deletedId)
-                        );
-                      }}
-                      onEdit={() => {
-                        setEditEmployee(emp);
-                        setShowAddModal(true);
-                      }}
-                    />
+                    <td>
+                      <ThreeDotMenu
+                        id={emp._id}
+                        type="employees"
+                        onDeleteSuccess={(deletedId) => {
+                          setEmployees(prev =>
+                            prev.filter(e => e._id !== deletedId)
+                          );
+                        }}
+                        onEdit={() => {
+                          setEditEmployee(emp);
+                          setShowAddModal(true);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
+                    No employees found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
