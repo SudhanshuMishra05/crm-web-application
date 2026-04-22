@@ -74,9 +74,7 @@ const Dashboard = () => {
         </div>
 
         {/* Active Sales People - Connected */}
-        <div className="card">
-          <h3 style={{ marginBottom: '20px' }}></h3>
-          
+        <div className="card"> 
           {loading ? (
             <p>Loading...</p>
           ) : (
